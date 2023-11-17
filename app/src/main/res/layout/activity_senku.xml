@@ -1,0 +1,360 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cardview_dark_background"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/titleSenku"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/cardview_shadow_start_color"
+        android:gravity="center"
+        android:text="@string/senku"
+        android:textColor="@color/white"
+        android:textSize="48sp" />
+
+    <LinearLayout
+        android:id="@+id/buttonLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/titleSenku"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/start"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Play" />
+
+        <Button
+            android:id="@+id/reset"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/reset" />
+
+        <Button
+            android:id="@+id/deshacer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Deshacer" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/textViewLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/buttonLayout"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/layoutBloques1x"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:id="@+id/layoutBloques11x"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+
+                android:orientation="horizontal"
+                tools:ignore="NestedWeights">
+
+
+                <Button
+                    android:id="@+id/bloque111"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque112"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque113"
+                    style="@style/lastBlock" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutBloques12x"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+
+                <Button
+                    android:id="@+id/bloque121"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque122"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque123"
+                    style="@style/lastBlock" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutBloques13x"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+
+                <Button
+                    android:id="@+id/bloque131"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque132"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque133"
+                    style="@style/lastBlock" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutBloques2x"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:id="@+id/layoutBloques21x"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                tools:ignore="NestedWeights">
+
+
+                <Button
+                    android:id="@+id/bloque211"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque212"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque213"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque214"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque215"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque216"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque217"
+                    style="@style/lastBlock" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutBloques22x"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+
+                <Button
+                    android:id="@+id/bloque221"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque222"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque223"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque224"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque225"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque226"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque227"
+                    style="@style/lastBlock" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutBloques23x"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+
+                <Button
+                    android:id="@+id/bloque231"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque232"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque233"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque234"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque235"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque236"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque237"
+                    style="@style/lastBlock" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutBloques3x"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/layoutBloques31x"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+
+                android:orientation="horizontal"
+                tools:ignore="NestedWeights">
+
+
+                <Button
+                    android:id="@+id/bloque311"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque312"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque313"
+                    style="@style/lastBlock" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutBloques32x"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+
+                <Button
+                    android:id="@+id/bloque321"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque322"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque323"
+                    style="@style/lastBlock" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutBloques33x"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+
+                <Button
+                    android:id="@+id/bloque331"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque332"
+                    style="@style/blocks" />
+
+                <Button
+                    android:id="@+id/bloque333"
+                    style="@style/lastBlock" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutMenuB"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/senkuMenuB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/menu" />
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

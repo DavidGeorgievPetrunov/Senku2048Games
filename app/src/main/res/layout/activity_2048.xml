@@ -1,0 +1,253 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cardview_dark_background">
+
+    <TextView
+        android:id="@+id/title2048"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/cardview_shadow_start_color"
+        android:gravity="center"
+        android:text="2048"
+        android:textColor="@color/white"
+        android:textSize="10mm" />
+
+    <LinearLayout
+        android:id="@+id/ScoresLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title2048"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/ScoreL"
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Score:"
+            android:layout_below="@id/title2048"
+            android:textSize="4mm"
+            android:textColor="@color/white"/>
+        <TextView
+            android:id="@+id/ScoreNum"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="0"
+            android:textSize="4mm"
+            android:layout_below="@id/title2048"
+            android:layout_toEndOf="@id/ScoreL"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:id="@+id/RecordL"
+            android:textSize="4mm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Record:"
+            android:layout_below="@id/title2048"
+            android:layout_toEndOf="@id/ScoreNum"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:id="@+id/RecordNum"
+            android:layout_width="0dp"
+            android:textSize="4mm"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="0"
+            android:layout_below="@id/title2048"
+            android:layout_toEndOf="@id/RecordL"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ScoresLayout"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/start"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_below="@id/ScoresLayout"
+            android:text="Play" />
+
+        <Button
+            android:id="@+id/reset"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_toEndOf="@id/start"
+            android:layout_below="@id/title2048"
+            android:text="Reset" />
+
+        <Button
+            android:id="@+id/deshacer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_toEndOf="@id/reset"
+            android:layout_below="@id/title2048"
+            android:text="Deshacer" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/textViewLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonLayout"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_centerHorizontal="true">
+
+        <LinearLayout
+            android:id="@+id/layoutBloques1x"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_margin="3dp"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/bloque11"
+                style="@style/blocks"
+                android:text="0"/>
+
+            <TextView
+                android:id="@+id/bloque12"
+                style="@style/blocks"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/bloque13"
+                style="@style/blocks"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/bloque14"
+                style="@style/lastBlock"
+                android:layout_marginRight="0dp"
+                android:text="0" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutBloques2x"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="3dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginBottom="3dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/bloque21"
+                style="@style/blocks"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/bloque22"
+                style="@style/blocks"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/bloque23"
+                style="@style/blocks"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/bloque24"
+                style="@style/lastBlock"
+                android:layout_marginRight="0dp"
+                android:text="0" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/layoutBloques3x"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="14mm"
+            android:layout_margin="3dp"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/bloque31"
+                style="@style/blocks"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/bloque32"
+                style="@style/blocks"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/bloque33"
+                style="@style/blocks"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/bloque34"
+                style="@style/lastBlock"
+                android:layout_marginRight="0dp"
+                android:text="0" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/layoutBloques4x"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_margin="3dp"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/bloque41"
+                style="@style/blocks"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/bloque42"
+                style="@style/blocks"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/bloque43"
+                style="@style/blocks"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/bloque44"
+                style="@style/lastBlock"
+                android:layout_marginRight="0dp"
+                android:text="0" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewLayout"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/to2048MenuB"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/menu"></Button>
+    </LinearLayout>
+
+</RelativeLayout>
