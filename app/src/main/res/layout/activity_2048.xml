@@ -23,39 +23,39 @@
 
         <TextView
             android:id="@+id/ScoreL"
-            android:layout_width="10dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/score"
-            android:textColor="@color/white"
-            android:textSize="28sp" />
+            android:layout_weight="1.6"
+
+            style="@style/button" />
 
         <TextView
             android:id="@+id/ScoreNum"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/_0"
-            android:textColor="@color/white"
-            android:textSize="28sp" />
+            android:layout_weight="1.6"
+            style="@style/button" />
 
         <TextView
             android:id="@+id/RecordL"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/record"
-            android:textColor="@color/white"
-            android:textSize="28sp" />
+            android:layout_weight="1.6"
+            style="@style/button" />
 
         <TextView
             android:id="@+id/RecordNum"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/_0"
-            android:textColor="@color/white"
-            android:textSize="28sp" />
+            android:layout_weight="1.6"
+
+            style="@style/button" />
+        <TextView
+            android:id="@+id/TimerL"
+            style="@style/button"
+            android:layout_weight="1.6"
+            android:text="@string/timer" />
+        <TextView
+            android:id="@+id/TimerNum"
+            style="@style/button"
+            android:text="@string/_0" />
+
 
     </LinearLayout>
 
@@ -68,31 +68,22 @@
 
         <Button
             android:id="@+id/start"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:onClick="start"
-            android:text="Play" />
+            android:text="Play"
+            style="@style/button" />
 
         <Button
             android:id="@+id/reset"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Reset" />
+            android:text="Reset"
+            android:onClick="reset"
+            style="@style/button" />
 
         <Button
-            android:id="@+id/deshacer"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Undo" />
-        <Button
-            android:id="@+id/to2048MenuB"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/menu"/>
+            android:id="@+id/Undo"
+            style="@style/button"
+            android:onClick="Undo"
+            android:text="@string/undo" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -101,11 +92,7 @@
         android:layout_below="@id/buttonLayout"
         android:orientation="vertical">
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.3"
-            android:visibility="invisible"/>
+        <LinearLayout style="@style/lesserVoidSpace" />
 
         <LinearLayout
             android:id="@+id/buttonlayout1"
@@ -116,10 +103,7 @@
 
             <Button
                 android:id="@+id/start1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:visibility="invisible" />
+                style="@style/button2048Invis" />
 
             <GridLayout
                 android:id="@+id/gridLayout2048"
@@ -127,54 +111,36 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:columnCount="4"
-                android:rowCount="4">
+                android:rowCount="4"
+                style="@style/blocks">
+
 
                 <TextView
-                    style="@style/blocks"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/blocks2048"
                     android:layout_row="0"
-                    android:layout_rowWeight="1"
                     android:layout_column="0"
-                    android:layout_columnWeight="1"
-                    android:layout_gravity="fill"
                     android:text="" />
 
                 <TextView
-                    style="@style/blocks"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/blocks2048"
                     android:layout_row="0"
-                    android:layout_rowWeight="1"
                     android:layout_column="1"
-                    android:layout_columnWeight="1"
-                    android:layout_gravity="fill"
                     android:text="" />
 
                 <TextView
-                    style="@style/blocks"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/blocks2048"
                     android:layout_row="0"
-                    android:layout_rowWeight="1"
                     android:layout_column="2"
-                    android:layout_columnWeight="1"
-                    android:layout_gravity="fill"
                     android:text="" />
 
                 <TextView
-                    style="@style/blocks"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/blocks2048"
                     android:layout_row="0"
-                    android:layout_rowWeight="1"
                     android:layout_column="3"
-                    android:layout_columnWeight="1"
-                    android:layout_gravity="fill"
                     android:text="" />
 
                 <TextView
-                    style="@style/blocks"
+                    style="@style/textViews"
                     android:layout_height="wrap_content"
                     android:layout_row="1"
                     android:layout_rowWeight="1"
@@ -183,7 +149,7 @@
                     android:text="" />
 
                 <TextView
-                    style="@style/blocks"
+                    style="@style/textViews"
                     android:layout_height="wrap_content"
                     android:layout_row="1"
                     android:layout_column="1"
@@ -191,7 +157,7 @@
                     android:text="" />
 
                 <TextView
-                    style="@style/blocks"
+                    style="@style/textViews"
                     android:layout_height="wrap_content"
                     android:layout_row="1"
                     android:layout_column="2"
@@ -199,18 +165,13 @@
                     android:text="" />
 
                 <TextView
-                    style="@style/blocks"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/blocks2048"
                     android:layout_row="1"
-                    android:layout_rowWeight="1"
                     android:layout_column="3"
-                    android:layout_columnWeight="1"
-                    android:layout_gravity="fill"
                     android:text="" />
 
                 <TextView
-                    style="@style/blocks"
+                    style="@style/textViews"
                     android:layout_height="wrap_content"
                     android:layout_row="2"
                     android:layout_rowWeight="1"
@@ -219,7 +180,7 @@
                     android:text="" />
 
                 <TextView
-                    style="@style/blocks"
+                    style="@style/textViews"
                     android:layout_height="wrap_content"
                     android:layout_row="2"
                     android:layout_column="1"
@@ -227,7 +188,7 @@
                     android:text="" />
 
                 <TextView
-                    style="@style/blocks"
+                    style="@style/textViews"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_row="2"
@@ -236,18 +197,13 @@
                     android:text="" />
 
                 <TextView
-                    style="@style/blocks"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/blocks2048"
                     android:layout_row="2"
-                    android:layout_rowWeight="1"
                     android:layout_column="3"
-                    android:layout_columnWeight="1"
-                    android:layout_gravity="fill"
                     android:text="" />
 
                 <TextView
-                    style="@style/blocks"
+                    style="@style/textViews"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_row="3"
@@ -257,7 +213,7 @@
                     android:text="" />
 
                 <TextView
-                    style="@style/blocks"
+                    style="@style/textViews"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_row="3"
@@ -266,7 +222,7 @@
                     android:text="" />
 
                 <TextView
-                    style="@style/blocks"
+                    style="@style/textViews"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_row="3"
@@ -275,7 +231,7 @@
                     android:text="" />
 
                 <TextView
-                    style="@style/blocks"
+                    style="@style/textViews"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_row="3"
@@ -287,16 +243,10 @@
 
             <Button
                 android:id="@+id/right"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:visibility="invisible" />
+                style="@style/button2048Invis" />
         </LinearLayout>
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.4"
-            android:visibility="invisible"/>
+        <LinearLayout style="@style/lesserVoidSpace" />
+
     </LinearLayout>
 </RelativeLayout>
