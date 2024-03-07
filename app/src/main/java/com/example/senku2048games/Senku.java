@@ -1,11 +1,11 @@
 package com.example.senku2048games;
 
-import android.content.Intent;
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
@@ -13,8 +13,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 public class Senku extends AppCompatActivity {
     private GridLayout gridLayout;
@@ -28,21 +31,101 @@ public class Senku extends AppCompatActivity {
     private ArrayList<int[][]> arrayOfOldArrays = new ArrayList<>();
     private TextView timerTextView;
     private CountDownTimer countDownTimer;
-
+    private boolean gameEnded;
     private long remainingTime;
+
+    private SharedPreferences sharedPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_senku);
 
-        gridLayout = this.findViewById(R.id.gridLayoutSenku);
+        sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
 
+
+        gridLayout = this.findViewById(R.id.gridLayoutSenku);
+        this.gameEnded = false;
         this.rows = this.gridLayout.getRowCount();
         this.columns = this.gridLayout.getColumnCount();
 
         oldArray = new int[rows][columns];
         buttonArray = new Button[rows][columns];
+
+        startSenku();
+
+        timerTextView = findViewById(R.id.tv_timer_number);
+
+        if (savedInstanceState != null) {
+            this.buttonArray = (Button[][]) savedInstanceState.getSerializable("array");
+            oldArray = (int[][]) savedInstanceState.getSerializable("oldArray");
+            this.arrayOfOldArrays = (ArrayList<int[][]>) savedInstanceState.getSerializable("arrayOfOldArrays");
+            remainingTime = savedInstanceState.getLong("RemainingTime");
+            startCountDown((int) remainingTime, this);
+            updateSenku();
+        } else {
+            startCountDown(null, this);
+            findViewById(R.id.undoSenku).setEnabled(false);
+        }
+    }
+
+    public void startCountDown(Integer time, Context context) {
+        long timerInterval = 1000;
+        int startingTime = (time == null) ? 600000 : time;
+
+        countDownTimer = new CountDownTimer(startingTime, timerInterval) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // Update the UI on the main thread
+                ((Activity) context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateTimerText(millisUntilFinished);
+                        remainingTime = millisUntilFinished;
+                    }
+                });
+            }
+
+            @Override
+            public void onFinish() {
+                // Update the UI on the main thread
+                ((Activity) context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        handleFinish(context);
+                    }
+                });
+            }
+        };
+
+        countDownTimer.start();
+    }
+
+    private void updateTimerText(long millisUntilFinished) {
+        timerTextView.setText("Time remaining: " + formatSecondsToTime(millisUntilFinished/1000));
+    }
+
+    private void handleFinish(Context context) {
+        String message = (check() && remainingTime / 1000 > 1) ? "Felicidades, has ganado." : "Lamentablemente has perdido.";
+        String displayMessage = (check() && remainingTime / 1000 > 1) ? "You win, congratulations, your remaining time is: " + remainingTime : "Timer finished! You Lose";
+
+        timerTextView.setText(displayMessage);
+        popup_dialog pop = new popup_dialog(context, message);
+        pop.show();
+
+        gameEnded = true;
+        findViewById(R.id.undoSenku).setEnabled(false);
+    }
+
+    public String formatSecondsToTime(Long seconds) {
+        long hours = seconds / 3600;
+        long minutes = (seconds % 3600) / 60;
+        long remainingSeconds = seconds % 60;
+
+        return String.format("%02d:%02d:%02d", hours, minutes, remainingSeconds);
+    }
+    private void startSenku() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 Button button = (Button) gridLayout.getChildAt(i * columns + j);
@@ -53,8 +136,10 @@ public class Senku extends AppCompatActivity {
                                 (i == 6 && (j == 0 || j == 1 || j == 5 || j == 6)) ||
                                 (i == 3 && j == 3);
                 if (isSpecificPosition) {
+                    button.setBackground(getDrawable(R.drawable.ic_void_circle));
                     button.setTag("voidcircle_background");
                 } else {
+                    button.setBackground(getDrawable(R.drawable.ic_filled_circle));
                     button.setTag("filledcircle_background");
                 }
                 final int row = i;
@@ -70,62 +155,12 @@ public class Senku extends AppCompatActivity {
 
             }
         }
-
-        timerTextView = findViewById(R.id.tv_timer_number);
-
-        long timerDuration = 10000;
-        long timerInterval = 1000;
-
-        if (savedInstanceState != null) {
-            oldArray = (int[][]) savedInstanceState.getSerializable("oldArray");
-            this.arrayOfOldArrays = (ArrayList<int[][]>) savedInstanceState.getSerializable("arrayOfOldArrays");
-            remainingTime = savedInstanceState.getLong("RemainingTime");
-            replaceNewWithOld();
-            updateSenku();
-            countDownTimer = new CountDownTimer(timerDuration, timerInterval) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    timerTextView.setText("Time remaining: " + millisUntilFinished / 1000 + " seconds");
-                    remainingTime = millisUntilFinished;
-                }
-
-                @Override
-                public void onFinish() {
-                    if (!check() || remainingTime/1000 <= 1) {
-                        timerTextView.setText("Timer finished! You Lose");
-                    } else {
-                        timerTextView.setText("You win, congratulations, your remaining time is: "+remainingTime);
-                    }
-                }
-            };
-
-            countDownTimer.start();
-        } else {
-            countDownTimer = new CountDownTimer(timerDuration, timerInterval) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    timerTextView.setText("Time remaining: " + millisUntilFinished / 1000 + " seconds");
-                    remainingTime = millisUntilFinished;
-                }
-
-                @Override
-                public void onFinish() {
-                    if (!check() || remainingTime/1000 <= 1) {
-                        timerTextView.setText("Timer finished! You Lose");
-                    } else {
-                        timerTextView.setText("You win, congratulations, your remaining time is: "+remainingTime);
-                    }
-                }
-            };
-
-            countDownTimer.start();
-            findViewById(R.id.deshacer).setEnabled(false);
-        }
     }
-    private void copyArray(){
-        for (int i = 0; i < rows; i++){
-            for(int j = 0; j < columns; j++){
-                if ("voidcircle_background".equals(buttonArray[i][j].getTag())){
+
+    private void copyArray() {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                if ("voidcircle_background".equals(buttonArray[i][j].getTag())) {
                     this.oldArray[i][j] = 0;
                 } else {
                     this.oldArray[i][j] = 1;
@@ -146,33 +181,46 @@ public class Senku extends AppCompatActivity {
     }
 
     private void replaceNewWithOld() {
-        for (int i = 0; i < rows; i++){
-            for(int j = 0; j < columns; j++) {
-                if(this.oldArray[i][j] == 0){
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                if (this.oldArray[i][j] == 0) {
                     this.buttonArray[i][j].setTag("voidcircle_background");
-                    this.buttonArray[i][j].setBackground(getDrawable(R.drawable.voidcircle));
+                    this.buttonArray[i][j].setBackground(getDrawable(R.drawable.ic_void_circle));
                 } else {
                     this.buttonArray[i][j].setTag("filledcircle_background");
-                    this.buttonArray[i][j].setBackground(getDrawable(R.drawable.filledcircle));
+                    this.buttonArray[i][j].setBackground(getDrawable(R.drawable.ic_filled_circle));
                 }
             }
         }
     }
 
-    public void undo(View v){
-        if(!this.arrayOfOldArrays.isEmpty()) {
+    public void resetSenku(View v) {
+        this.arrayOfOldArrays = new ArrayList<>();
+        oldArray = new int[rows][columns];
+        findViewById(R.id.undoSenku).setEnabled(false);
+        if (this.countDownTimer != null) {
+            this.countDownTimer.cancel();
+        }
+        this.gameEnded = false;
+        startCountDown(null, this);
+        startSenku();
+    }
+
+    public void undoSenku(View v) {
+        if (!this.arrayOfOldArrays.isEmpty()) {
             replaceNewWithOld();
             arrayOfOldArrays.remove(arrayOfOldArrays.size() - 1);
             if (!arrayOfOldArrays.isEmpty()) {
                 this.oldArray = this.arrayOfOldArrays.get(arrayOfOldArrays.size() - 1);
             } else {
-                findViewById(R.id.deshacer).setEnabled(false);
+                findViewById(R.id.undoSenku).setEnabled(false);
             }
             updateSenku();
         } else {
-            findViewById(R.id.deshacer).setEnabled(false);
+            findViewById(R.id.undoSenku).setEnabled(false);
         }
     }
+
     private void updateSenku() {
         for (int i = 0; i < this.rows; i++) {
             for (int j = 0; j < this.columns; j++) {
@@ -187,47 +235,62 @@ public class Senku extends AppCompatActivity {
     }
 
     private void onButtonClick(int clickedRow, int clickedCol, Button clickedButton) {
-        if (!check()) {
-            showToast("Has perdido");
-            this.countDownTimer.cancel();
-        } else if (checkSinglePiece()) {
-            showToast("Has ganado");
-            this.countDownTimer.cancel();
-        }
-        if (firstClickedButton == null) {
-            if ("voidcircle_background".equals(clickedButton.getTag())) {
-            } else {
-                firstClickedButton = clickedButton;
-                firstClickedRow = clickedRow;
-                firstClickedCol = clickedCol;
-                firstClickedButton.setBackground(getDrawable(R.drawable.selected_circle));
-            }
-        } else if (isValid(firstClickedRow, firstClickedCol, clickedRow, clickedCol)) {
-            copyArray();
-            findViewById(R.id.deshacer).setEnabled(true);
-            animateMove(firstClickedButton, buttonArray[clickedRow][clickedCol]);
-            int rowInBetween = getRowInBetween(firstClickedRow, clickedRow);
-            int colInBetween = getColInBetween(firstClickedCol, clickedCol);
-            this.buttonArray[rowInBetween][colInBetween].setBackground(getDrawable(R.drawable.voidcircle));
-            this.buttonArray[rowInBetween][colInBetween].setTag("voidcircle_background");
-            firstClickedButton.setBackground(getDrawable(R.drawable.voidcircle));
-            firstClickedButton.setTag("voidcircle_background");
-            this.buttonArray[firstClickedRow][firstClickedCol] = firstClickedButton;
-            clickedButton.setBackground(getDrawable(R.drawable.filledcircle));
-            clickedButton.setTag("filledcircle_background");
-            this.buttonArray[clickedRow][clickedCol] = clickedButton;
+        if (!gameEnded) {
+            if (firstClickedButton == null) {
+                if ("voidcircle_background".equals(clickedButton.getTag())) {
+                } else {
+                    firstClickedButton = clickedButton;
+                    firstClickedRow = clickedRow;
+                    firstClickedCol = clickedCol;
+                    firstClickedButton.setBackground(getDrawable(R.drawable.ic_selected_circle));
+                }
+            } else if (isValid(firstClickedRow, firstClickedCol, clickedRow, clickedCol)) {
+                copyArray();
+                findViewById(R.id.undoSenku).setEnabled(true);
+                animateMove(firstClickedButton, buttonArray[clickedRow][clickedCol]);
+                int rowInBetween = getRowInBetween(firstClickedRow, clickedRow);
+                int colInBetween = getColInBetween(firstClickedCol, clickedCol);
+                this.buttonArray[rowInBetween][colInBetween].setBackground(getDrawable(R.drawable.ic_void_circle));
+                this.buttonArray[rowInBetween][colInBetween].setTag("voidcircle_background");
+                firstClickedButton.setBackground(getDrawable(R.drawable.ic_void_circle));
+                firstClickedButton.setTag("voidcircle_background");
+                this.buttonArray[firstClickedRow][firstClickedCol] = firstClickedButton;
+                clickedButton.setBackground(getDrawable(R.drawable.ic_filled_circle));
+                clickedButton.setTag("filledcircle_background");
+                this.buttonArray[clickedRow][clickedCol] = clickedButton;
 
-            firstClickedButton = null;
-            firstClickedRow = -1;
-            firstClickedCol = -1;
-
-        } else {
-            if ("voidcircle_background".equals(clickedButton.getTag())) {
-            } else {
-                firstClickedButton.setBackground(getDrawable(R.drawable.filledcircle));
                 firstClickedButton = null;
                 firstClickedRow = -1;
                 firstClickedCol = -1;
+
+                if(checkSinglePiece()) {
+                    showToast("Has ganado");
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+                    try {
+                        Date oldRecord = format.parse(sharedPreferences.getString("recordSenku","00:00:00"));
+                        Date newRecord = format.parse(formatSecondsToTime(this.remainingTime/1000));
+
+                        if (oldRecord.compareTo(newRecord) > 0) {
+                            editor.putString("recordSenku", formatSecondsToTime(this.remainingTime/1000));
+                            editor.apply();
+                        }
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                    this.countDownTimer.cancel();
+                }else if (!check()) {
+                    showToast("Has perdido");
+                    this.countDownTimer.cancel();
+                }
+            } else {
+                if ("voidcircle_background".equals(clickedButton.getTag())) {
+                } else {
+                    firstClickedButton.setBackground(getDrawable(R.drawable.ic_filled_circle));
+                    firstClickedButton = null;
+                    firstClickedRow = -1;
+                    firstClickedCol = -1;
+                }
             }
         }
     }
@@ -292,22 +355,22 @@ public class Senku extends AppCompatActivity {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 if (j < columns - 2 && isValid(i, j, i, j + 2)) {
-               //     Log.d("Check1", "check1"+i + "j:"+j);;
+                    //     Log.d("Check1", "check1"+i + "j:"+j);;
                     return true;
                 }
 
                 if (i < rows - 2 && isValid(i, j, i + 2, j)) {
-        //            Log.d("Check2", "check2" +i + "j:"+j);;
+                    //            Log.d("Check2", "check2" +i + "j:"+j);;
                     return true;
                 }
 
                 if (j > 1 && isValid(i, j, i, j - 2)) {
-     //               Log.d("Check3", "check3"+i + "j:"+j);;
+                    //               Log.d("Check3", "check3"+i + "j:"+j);;
                     return true;
                 }
 
                 if (i > 1 && isValid(i, j, i - 2, j)) {
-                //    Log.d("Check4", "check4"+i + "j:"+j);;
+                    //    Log.d("Check4", "check4"+i + "j:"+j);;
                     return true;
                 }
             }
@@ -351,6 +414,7 @@ public class Senku extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         //Añadir oldArray y arrayOfOlds
+        outState.putSerializable("array",this.buttonArray);
         outState.putSerializable("oldArray", this.oldArray);
         outState.putSerializable("arrayOfOldArrays", this.arrayOfOldArrays);
         outState.putLong("RemainingTime", remainingTime);

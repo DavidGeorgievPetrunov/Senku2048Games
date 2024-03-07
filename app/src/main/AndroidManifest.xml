@@ -22,8 +22,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".Senku" />
-        <activity android:name=".game2048" />
+        <activity android:name=".Game2048" />
         <activity android:name=".Main" />
+        <activity android:name=".Login"/>
+        <activity android:name=".Register"/>
+        <activity android:name=".Settings"/>
     </application>
 
 </manifest>

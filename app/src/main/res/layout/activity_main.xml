@@ -4,26 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
-    tools:context=".Splash"
-    android:gravity="center">
+    android:background="@color/color_primary"
+    tools:context=".Splash">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/iv_icon_user"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_yellow_square"
+        style="@style/textViews"
+        android:textSize="40dp"
+        android:text="@string/placeholder"/>
+    />
+    <TextView
+        android:id="@+id/tv_username"
+        android:layout_toRightOf="@id/iv_icon_user"
+        style="@style/textViews"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:textSize="40dp"
+        android:text="@string/placeholder"/>
 
-        <Button
-            android:id="@+id/senkuB"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Senku" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fb_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/color_primary"
+        android:src="@drawable/ic_settings"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:onClick="goSettings"/>
 
-        <Button
-            android:id="@+id/to2048B"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="to2048menu"
-            android:text="2048" />
-    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@id/fb_settings"
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:scrollbars="vertical" />
+
 </RelativeLayout>

@@ -1,17 +1,15 @@
 package com.example.senku2048games;
 
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -20,8 +18,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
-public class game2048 extends AppCompatActivity {
+public class Game2048 extends AppCompatActivity {
 
     private GridLayout gridLayout;
     private int score;
@@ -32,10 +29,13 @@ public class game2048 extends AppCompatActivity {
     private static final int SWIPE_VELOCITY_THRESHOLD = 100;
     int rows;
     int cols;
-    private GestureDetector gestureDetector; // Declare as a class member
-
-    private int[][] array2048 = new int[4][4];
+    private GestureDetector gestureDetector;
+    private int size;
+    private int[][] array2048;
     private ArrayList<int[][]> arrayOfOldArrays = new ArrayList<>();
+    ArrayList<Integer> arrayScores = new ArrayList<>();
+    private SharedPreferences sharedPreferences;
+    TextView tvRecord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +43,23 @@ public class game2048 extends AppCompatActivity {
         isStarted = false;
         time = 0;
         isAnimating = false;
-        setContentView(R.layout.activity_2048);
+        sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+        size = sharedPreferences.getInt("sizeSenku",4);
+        showToast(String.valueOf(this.size));
+        if (size == 3) {
+            setContentView(R.layout.activity_2048_3x3);
+        } else if (size == 4) {
+            setContentView(R.layout.activity_2048_4x4);
+        } else if (size == 5) {
+            setContentView(R.layout.activity_2048_5x5);
+        }
+
         gridLayout = findViewById(R.id.gridLayout2048);
+
+        this.array2048 =  new int[size][size];
+        tvRecord = findViewById(R.id.RecordNum);
+        tvRecord.setText(String.valueOf(sharedPreferences.getInt("record2048",0)));
+
         gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
@@ -53,6 +68,7 @@ public class game2048 extends AppCompatActivity {
 
                 if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
                     if (isStarted && !isAnimating) {
+                        copyInsideArrayofArrays();
                         if (diffX > 0) {
                             //         showToast("Right");
                             moveRight();
@@ -61,10 +77,11 @@ public class game2048 extends AppCompatActivity {
                             //        showToast("Left");
                             moveLeft();
                             addRandom();
-                        }
-                    }
+                        }                    }
+                    findViewById(R.id.Undo).setEnabled(true);
                 } else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
                     if (isStarted && !isAnimating) {
+                        copyInsideArrayofArrays();
                         if (diffY > 0) {
                             //         showToast("Down");
                             moveDown();
@@ -75,9 +92,9 @@ public class game2048 extends AppCompatActivity {
                             addRandom();
                         }
                     }
+                    findViewById(R.id.Undo).setEnabled(true);
                 }
 
-                copyInsideArrayofArrays();
                 return super.onFling(e1, e2, velocityX, velocityY);
             }
         });
@@ -103,8 +120,13 @@ public class game2048 extends AppCompatActivity {
                 }
                 if (isStarted) {
                     time += 1;
-                    TextView t = findViewById(R.id.TimerNum);
-                    t.setText(formatSecondsToTime(time));
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            TextView t = findViewById(R.id.TimerNum);
+                            t.setText(formatSecondsToTime(time));
+                        }
+                    });
                 }
             }
         }, 0, 1000);
@@ -112,11 +134,17 @@ public class game2048 extends AppCompatActivity {
         rows = gridLayout.getRowCount();
         cols = gridLayout.getColumnCount();
 
+        findViewById(R.id.Undo).setEnabled(false);
+
         if (savedInstanceState != null) {
             this.score = savedInstanceState.getInt("Score");
+            this.arrayScores = (ArrayList<Integer>) savedInstanceState.getSerializable("ArrayScores");
             this.array2048 = (int[][]) savedInstanceState.getSerializable("Array");
             this.arrayOfOldArrays = (ArrayList<int[][]>) savedInstanceState.getSerializable("ArrayOfOld");
             this.time = savedInstanceState.getInt("Time");
+            if(!this.arrayOfOldArrays.isEmpty()){
+                findViewById(R.id.Undo).setEnabled(true);
+            }
             update2048();
         }
 
@@ -136,22 +164,25 @@ public class game2048 extends AppCompatActivity {
             copyOfOldArray[i] = Arrays.copyOf(array2048[i], array2048[i].length);
         }
 
+        this.arrayScores.add(score);
         this.arrayOfOldArrays.add(copyOfOldArray);
     }
 
-    public void undo(View v) {
+    public void deshacer(View v) {
         if (!this.arrayOfOldArrays.isEmpty()) {
+            this.array2048 = this.arrayOfOldArrays.get(arrayOfOldArrays.size() - 1);
             arrayOfOldArrays.remove(arrayOfOldArrays.size() - 1);
-            if (!arrayOfOldArrays.isEmpty()) {
-                this.array2048 = this.arrayOfOldArrays.get(arrayOfOldArrays.size() - 1);
-            } else {
-                findViewById(R.id.deshacer).setEnabled(false);
+            this.score = this.arrayScores.get(arrayScores.size()-1);
+            arrayScores.remove(arrayScores.size()-1);
+            if (arrayOfOldArrays.isEmpty()) {
+                findViewById(R.id.Undo).setEnabled(false);
             }
             update2048();
         } else {
-            findViewById(R.id.deshacer).setEnabled(false);
+            findViewById(R.id.Undo).setEnabled(false);
         }
     }
+
 
     private void moveUp() {
         for (int j = 0; j < cols; j++) {
@@ -270,7 +301,12 @@ public class game2048 extends AppCompatActivity {
         }
 
         int index = x * gridLayout.getColumnCount() + y;
-        addToArray(x, y, 2);
+        int chancesTo4 = random.nextInt(100);
+        if (chancesTo4 <= 20){
+            addToArray(x, y, 4);
+        } else {
+            addToArray(x, y, 2);
+        }
         TextView textView = (TextView) gridLayout.getChildAt(index);
         textView.setText("2");
 
@@ -403,11 +439,14 @@ public class game2048 extends AppCompatActivity {
         int rows = gridLayout.getRowCount();
         int cols = gridLayout.getColumnCount();
 
-        TextView score = (TextView) findViewById(R.id.ScoreNum);
-        TextView record = (TextView) findViewById(R.id.RecordNum);
-        score.setText(String.valueOf(this.score));
-        record.setText(String.valueOf(this.score));
-
+        TextView tvScore = (TextView) findViewById(R.id.ScoreNum);
+        tvScore.setText(String.valueOf(this.score));
+        if(this.score > sharedPreferences.getInt("record2048",0)) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("record2048", this.score);
+            editor.apply();
+            tvRecord.setText(String.valueOf(this.score));
+        }
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 int index = i * cols + j;
@@ -417,8 +456,12 @@ public class game2048 extends AppCompatActivity {
         }
         if (this.score >= 2048) {
             showToast("Has ganado");
+            popup_dialog pop = new popup_dialog(this, "Felicidades, has ganado.");
+            pop.show();
         } else if (!check()) {
             showToast("Has perdido");
+            popup_dialog pop = new popup_dialog(this, "Lamentablemente has perdido.");
+            pop.show();
         }
     }
 
@@ -451,6 +494,8 @@ public class game2048 extends AppCompatActivity {
 
         this.time=0;
         this.score = 0;
+        findViewById(R.id.Undo).setEnabled(false);
+        this.arrayOfOldArrays = new ArrayList<>();
         start(v);
         update2048();
     }
@@ -480,6 +525,7 @@ public class game2048 extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt("Score", this.score);
+        outState.putSerializable("ArrayScores", this.arrayScores);
         outState.putSerializable("Array", this.array2048);
         outState.putSerializable("ArrayOfOld", this.arrayOfOldArrays);
         outState.putInt("Time", this.time);

@@ -11,15 +11,24 @@
     <string name="app_name2">Splash</string>
     <string name="help">Help Screen</string>
     <string name="menu2">Main Menu Screen</string>
-    <string name="settings">Settings Screen</string>
+    <string name="settings">SETTINGS</string>
     <string name="game">Game Screen</string>
     <string name="scores">Scores Screen</string>
-    <string name="app_logo_top">SENKU</string>
-    <string name="app_logo_bottom">2048!</string>
+    <string name="app_logo_top">GAME</string>
+    <string name="app_logo_bottom">CENTER!</string>
     <string name="app_version_info">Version 1.0.0\n David Georgiev Petrunov\nNo
     Rights Reserved.</string>
     <string name="todo">TODO</string>
     <string name="timer">Timer:</string>
     <string name="_0_00">0:00</string>
     <string name="undo">Undo</string>
+    <string name="login">LOGIN</string>
+    <string name="register">REGISTER</string>
+    <string name="enter_your_user">Enter your User</string>
+    <string name="enter_your_password">Enter your Password</string>
+    <string name="deshacer">Deshacer</string>
+    <string name="close">Close</string>
+    <string name="placeholder">Placeholder</string>
+    <string name="enter_your_new_user">Enter your new User</string>
+    <string name="enter_your_new_password">Enter your new Password</string>
 </resources>

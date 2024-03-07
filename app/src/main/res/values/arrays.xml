@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="games_titles">
+        <item>2048</item>
+        <item>Senku</item>
+    </string-array>
+    <array name="games_images">
+        <item>@drawable/ic_2048</item>
+        <item>@drawable/ic_senku</item>
+    </array>
+</resources>
